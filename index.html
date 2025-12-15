@@ -35,29 +35,29 @@
 </div>
 
 <script>
-const USER = "valdemir669"; // seu usuário Adafruit IO
-const KEY  = "aio_VRCN84Kyz3qX05S09JyqgO5aHSpo"; // substitua pela sua AIO Key real
+// URL do backend no Vercel
+const SERVER_URL = "https://home-c2wwv1790-valdemirs-projects-acbc111b.vercel.app/lamp";
 
 // Estado das lâmpadas (0 = desligada, 1 = ligada)
 let estado = [0,0,0,0];
 
+// Função para enviar comando para o backend
 function enviar(feed, valor){
-  fetch(`https://io.adafruit.com/api/v2/${USER}/feeds/${feed}/data`, {
+  fetch(SERVER_URL, {
     method: "POST",
-    headers: {
-      "X-AIO-Key": KEY,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ value: valor })
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ feed: feed, value: valor })
   });
 }
 
+// Alterna o estado de uma lâmpada
 function toggleLampada(n){
   estado[n-1] = estado[n-1] ? 0 : 1;  // alterna estado
   document.getElementById("lamp"+n).className = estado[n-1] ? "on" : "off";
   enviar("lampada-"+n, estado[n-1]);
 }
 
+// Alterna o estado de todas as lâmpadas
 function toggleTodas(v){
   for(let i=1; i<=4; i++){
     estado[i-1] = v;
