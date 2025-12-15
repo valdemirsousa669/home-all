@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home All – Automação Inclusiva</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    text-align: center;
+    padding: 20px;
+  }
+  h1 {
+    color: #2c3e50;
+  }
+  .grupo {
+    max-width: 420px;
+    margin: auto;
+  }
+  button {
+    width: 100%;
+    padding: 18px;
+    margin: 8px 0;
+    font-size: 18px;
+    border: none;
+    border-radius: 14px;
+    color: white;
+    cursor: pointer;
+  }
+  .on { background: #4CAF50; }
+  .off { background: #f44336; }
+  .lamp { background: #607d8b; }
+</style>
+</head>
+
+<body>
+
+<h1>Home All</h1>
+<p>Casa para Todos</p>
+
+<div class="grupo">
+  <button class="lamp" onclick="liga(1)">Ligar Lâmpada 1</button>
+  <button class="lamp" onclick="desliga(1)">Desligar Lâmpada 1</button>
+
+  <button class="lamp" onclick="liga(2)">Ligar Lâmpada 2</button>
+  <button class="lamp" onclick="desliga(2)">Desligar Lâmpada 2</button>
+
+  <button class="lamp" onclick="liga(3)">Ligar Lâmpada 3</button>
+  <button class="lamp" onclick="desliga(3)">Desligar Lâmpada 3</button>
+
+  <button class="lamp" onclick="liga(4)">Ligar Lâmpada 4</button>
+  <button class="lamp" onclick="desliga(4)">Desligar Lâmpada 4</button>
+
+  <button class="on" onclick="todas(1)">LIGAR TODAS</button>
+  <button class="off" onclick="todas(0)">DESLIGAR TODAS</button>
+</div>
+
+<script>
+const USER = "valdemir669";
+const KEY  = "SUA_AIO_KEY_AQUI";
+
+function enviar(feed, valor){
+  fetch(`https://io.adafruit.com/api/v2/${USER}/feeds/${feed}/data`, {
+    method: "POST",
+    headers: {
+      "X-AIO-Key": KEY,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ value: valor })
+  });
+}
+
+function liga(n){ enviar(`lampada-${n}`, 1); }
+function desliga(n){ enviar(`lampada-${n}`, 0); }
+function todas(v){ enviar("lampadas-todas", v); }
+</script>
+
+</body>
+</html>
