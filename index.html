@@ -3,37 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home All</title>
+<title>Home All – Automação Inclusiva</title>
 <style>
-  body { font-family: Arial; display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f0f0f0; }
-  h1 { color: #2c3e50; }
-  button { font-size: 18px; padding: 15px; margin: 10px; border-radius: 10px; cursor: pointer; color: white; border: none; }
+  body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f0f0f0; }
+  h1 { color: #2c3e50; margin-bottom: 10px; }
+  p { color: #0277bd; margin-bottom: 20px; font-size: 16px; text-align: center; }
+  .lampadas, .acoes-todas { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 90%; max-width: 400px; margin-bottom: 20px; }
+  button { font-size: 18px; padding: 15px 0; width: 100%; border: none; border-radius: 15px; cursor: pointer; color: white; transition: transform 0.1s ease; }
+  button:active { transform: scale(0.95); }
   .on { background-color: #4CAF50; }
   .off { background-color: #b0b0b0; }
+  .ligar-todas { background-color: #4CAF50; }
+  .desligar-todas { background-color: #f44336; }
 </style>
 </head>
 <body>
 
 <h1>Home All</h1>
+<p>Casa para Todos – Controle suas lâmpadas de qualquer lugar</p>
 
-<div id="lampadas">
+<div class="lampadas">
   <button id="lamp1" class="off" onclick="toggleLampada(1)">Lâmpada 1</button>
   <button id="lamp2" class="off" onclick="toggleLampada(2)">Lâmpada 2</button>
   <button id="lamp3" class="off" onclick="toggleLampada(3)">Lâmpada 3</button>
   <button id="lamp4" class="off" onclick="toggleLampada(4)">Lâmpada 4</button>
 </div>
 
-<div>
-  <button id="todas" class="off" onclick="toggleTodas()">Ligar/Desligar Todas</button>
+<div class="acoes-todas">
+  <button class="ligar-todas" onclick="toggleTodas(1)">Ligar Todas</button>
+  <button class="desligar-todas" onclick="toggleTodas(0)">Desligar Todas</button>
 </div>
 
 <script>
-const USER = "valdemir669";
-const KEY = "SUA_AIO_KEY_AQUI";
+const USER = "valdemir669"; // seu usuário Adafruit IO
+const KEY  = "SUA_AIO_KEY_AQUI"; // substitua pela sua AIO Key real
 
 // Estado das lâmpadas (0 = desligada, 1 = ligada)
 let estado = [0,0,0,0];
-let estadoTodas = 0;
 
 function enviar(feed, valor){
   fetch(`https://io.adafruit.com/api/v2/${USER}/feeds/${feed}/data`, {
@@ -52,12 +58,11 @@ function toggleLampada(n){
   enviar("lampada-"+n, estado[n-1]);
 }
 
-function toggleTodas(){
-  estadoTodas = estadoTodas ? 0 : 1;
+function toggleTodas(v){
   for(let i=1; i<=4; i++){
-    estado[i-1] = estadoTodas;
-    document.getElementById("lamp"+i).className = estadoTodas ? "on" : "off";
-    enviar("lampada-"+i, estadoTodas);
+    estado[i-1] = v;
+    document.getElementById("lamp"+i).className = v ? "on" : "off";
+    enviar("lampada-"+i, v);
   }
 }
 </script>
